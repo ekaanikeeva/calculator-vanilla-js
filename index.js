@@ -109,7 +109,7 @@ buttons.addEventListener('click', (event) => {
         sign = pressedBtn;
         if(sign === "x²") result.textContent = firstNum * firstNum;
         else if (sign === '¹⁄ₓ') result.textContent = 1 / firstNum;
-        // else if (sign === '√ₓ') result.textContent = 
+        else if (sign === '√ₓ') result.textContent = Math.sqrt(firstNum);
         else result.textContent = sign;
 
         return;
