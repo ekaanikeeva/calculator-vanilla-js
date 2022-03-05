@@ -1,10 +1,11 @@
 const result = document.querySelector('.result_text');
 const buttons = document.querySelector('.buttons');
 const btn = document.querySelector('.btn');
-const buttonAC = document.querySelector('.ac');
+const buttonCE = document.querySelector('.ce');
+const buttonC = document.querySelector('.c')
 const form = document.querySelector('.form');
 
-const numbersList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '%'];
+const numbersList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '%', '+/-'];
 const signsList = ['-', '+', '×', '/', '⌫', 'x²', '¹⁄ₓ', '√ₓ'];
 
 let sign = ''; 
@@ -13,7 +14,8 @@ let secondNum = '';
 let percentOfNum = null;
 
 let finish  = false;
-let isAnsver = false;
+
+
 // очистить результат
 function clearResult () {
     firstNum = ''; 
@@ -23,12 +25,24 @@ function clearResult () {
     result.textContent = 0;
 }
 
+function clearNum () {
+    if (firstNum !== '' && secondNum === '') {
+        firstNum = ''; 
+        
+    }
+    else secondNum = '';
+
+    result.textContent = 0;
+}
+
 
 
 buttons.addEventListener('click', (event) => {
     
     if(!event.target.classList.contains('btn')) return;
-    else if(event.target === buttonAC) clearResult();
+    else if(event.target === buttonCE) clearNum();
+    else if (event.target === buttonC) clearResult();
+
     
     const pressedBtn = event.target.textContent;
 
@@ -50,19 +64,14 @@ buttons.addEventListener('click', (event) => {
                 firstNum = pressedBtn;
                 result.textContent = firstNum;
             }
-            else {secondNum =pressedBtn;
-                console.log('net')
+            else {
+                secondNum += pressedBtn;
+                console.log('n')
                 result.textContent = secondNum;
-                finish = false;}
+                finish = false;
+            }
 
-console.log(finish)
         }
-        // else if (firstNum!=='' && secondNum!=='' && !finish) {
-        //     console.log('ne finish')
-        //     secondNum=''
-        //     firstNum=pressedBtn;
-        //     result.textContent = firstNum;
-        // }
         else {
             secondNum += pressedBtn;
             result.textContent = secondNum;
@@ -88,22 +97,42 @@ console.log(finish)
                     break;
                 case '⌫':
                     let backArray = [];
-                    if (firstNum.length !== 1 && firstNum.length !== 0 && firstNum.length !== undefined) {
-                    backArray= firstNum.split('');
+                    console.log(firstNum.length)
+                    backArray = result.textContent.split('');
                     backArray.pop();
-                    firstNum = backArray.join('');
-                    } else firstNum = 0;
+                    if (result.textContent === firstNum) {
+                        if (firstNum.length === 1) {
+                            firstNum = '';
+                            result.textContent = 0;
+                        }
+                        else {
+                        firstNum = backArray.join('');
+                        result.textContent = firstNum;
+                    }
+                    }
+                    else { 
+                        if (secondNum.length === 1) {
+                            secondNum = ''
+                            result.textContent = 0;
+                        } 
+                        else {
+                        secondNum = backArray.join('');
+                        result.textContent = secondNum;}
+                    }
                     break;
             }
+            if (sign !== '⌫') result.textContent = firstNum;
+                    
             finish = true;
-            // sign = ''
-            // secondNum=''
-            result.textContent = firstNum;
+            sign = ''
+            
         }
         
         else result.textContent = sign;
         finish = true;
+        // sign = '';
         return;
+        
     }
     console.log(firstNum, secondNum, sign)
 });
@@ -115,15 +144,13 @@ form.addEventListener('submit', (evt) => {
     // if (firstNum.includes('%')) {
     //     return result.textContent = 0;
     // }
-    // else 
-
-    if (secondNum.includes('%')) {
+    else if (secondNum.includes('%')) {
         if (sign === '+') {
             secondNum = secondNum.split('').filter(el => el !== '%').join('') * firstNum / 100;
         }
        else if (sign === '×') {
             percentOfNum = secondNum.split('').filter(el => el !== '%').join('') * firstNum / 100;
-
+console.log(percentOfNum)
        }
     }
         switch (sign) {
@@ -149,11 +176,9 @@ form.addEventListener('submit', (evt) => {
                 break;
         }
         finish = true;
-        isSubmit = true;
-        sign=''
+        sign='';
+        secondNum='';
         result.textContent = firstNum;
-
-    
-console.log(firstNum, secondNum, sign)
+        console.log(firstNum, secondNum, sign)
 })
 
