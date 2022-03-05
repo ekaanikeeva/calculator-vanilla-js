@@ -40,17 +40,17 @@ form.addEventListener('submit', (evt) => {
        }
     }
         switch (sign) {
-            case "+":
+            case '+':
                 firstNum = (+firstNum) + (+secondNum);
                 break;
-            case "-":
+            case '-':
                 firstNum = firstNum - secondNum;
                 break;
-            case "×":
+            case '×':
                 if (percentOfNum !== null) firstNum = `${percentOfNum}`;
                 else firstNum = firstNum * secondNum;
                 break;
-            case "/":
+            case '/':
                 if (secondNum === '0') {
                     result.textContent = 'Err';
                     firstNum = '';
@@ -60,7 +60,7 @@ form.addEventListener('submit', (evt) => {
                 }
                 firstNum = firstNum / secondNum;
                 break;
-            case "x²":
+            case 'x²':
                 firstNum = firstNum * firstNum;
         }
         finish = true;
@@ -107,9 +107,26 @@ buttons.addEventListener('click', (event) => {
      // если нажат знак
      if (signsList.includes(pressedBtn)) {
         sign = pressedBtn;
-        if(sign === "x²") result.textContent = firstNum * firstNum;
+        if(sign === 'x²') result.textContent = firstNum * firstNum;
         else if (sign === '¹⁄ₓ') result.textContent = 1 / firstNum;
         else if (sign === '√ₓ') result.textContent = Math.sqrt(firstNum);
+        else if (sign === '⌫') {
+            console.log('length', firstNum.length, firstNum, result.textContent.length)
+            if (result.textContent !== 0) {
+                let backArray = [];
+            if (firstNum.length !== 1) {
+                backArray= firstNum.split('');
+                backArray.pop();
+                firstNum = backArray.join('');
+            } 
+            else firstNum = 0;
+            }
+            
+            
+            result.textContent = firstNum;
+            return;
+        }
+        // result.textContent = firstNum.split('').pop().join('');
         else result.textContent = sign;
 
         return;
