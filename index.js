@@ -5,7 +5,7 @@ const buttonAC = document.querySelector('.ac');
 const form = document.querySelector('.form');
 
 const numbersList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '%'];
-const signsList = ['-', '+', 'X', '/'];
+const signsList = ['-', '+', '×', '/', '⌫', 'x²', '¹⁄ₓ', '√ₓ'];
 
 let sign = ''; 
 let firstNum = ''; 
@@ -23,7 +23,6 @@ function clearResult () {
     result.textContent = 0;
 }
 
-
 form.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
@@ -35,10 +34,9 @@ form.addEventListener('submit', (evt) => {
         if (sign === '+') {
             secondNum = secondNum.split('').filter(el => el !== '%').join('') * firstNum / 100;
         }
-       else if (sign === 'X') {
+       else if (sign === '×') {
             percentOfNum = secondNum.split('').filter(el => el !== '%').join('') * firstNum / 100;
 
-        console.log(percentOfNum)
        }
     }
         switch (sign) {
@@ -48,7 +46,7 @@ form.addEventListener('submit', (evt) => {
             case "-":
                 firstNum = firstNum - secondNum;
                 break;
-            case "X":
+            case "×":
                 if (percentOfNum !== null) firstNum = `${percentOfNum}`;
                 else firstNum = firstNum * secondNum;
                 break;
@@ -62,20 +60,8 @@ form.addEventListener('submit', (evt) => {
                 }
                 firstNum = firstNum / secondNum;
                 break;
-                // case "%":
-                //     if (secondNum === '0') firstNum;
-                //     else if (secondNum === '') {
-                //         result.textContent = 'Err';
-                //     firstNum = '';
-                //     secondNum = '';
-                //     sign = '';
-                //     return;
-                //     }
-                //     else {
-                //         secondNum = `${secondNum}%`;
-                //         firstNum = firstNum + secondNum;
-                //     }
-                    // firstNum = firstNum * secondNum / 100;
+            case "x²":
+                firstNum = firstNum * firstNum;
         }
         finish = true;
         result.textContent = firstNum;
@@ -118,10 +104,13 @@ buttons.addEventListener('click', (event) => {
         return;
     }
 
-     // если нажата  + - / * 
+     // если нажат знак
      if (signsList.includes(pressedBtn)) {
         sign = pressedBtn;
-        result.textContent = sign;
+        if(sign === "x²") result.textContent = firstNum * firstNum;
+        else if (sign === '¹⁄ₓ') result.textContent = 1 / firstNum;
+        // else if (sign === '√ₓ') result.textContent = 
+        else result.textContent = sign;
 
         return;
     }
