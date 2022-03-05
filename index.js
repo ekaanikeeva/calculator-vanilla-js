@@ -13,7 +13,7 @@ let secondNum = '';
 let percentOfNum = null;
 
 let finish  = false;
-
+let isAnsver = false;
 // очистить результат
 function clearResult () {
     firstNum = ''; 
@@ -23,14 +23,101 @@ function clearResult () {
     result.textContent = 0;
 }
 
+
+
+buttons.addEventListener('click', (event) => {
+    
+    if(!event.target.classList.contains('btn')) return;
+    else if(event.target === buttonAC) clearResult();
+    
+    const pressedBtn = event.target.textContent;
+
+    if (numbersList.includes(pressedBtn)) {
+        
+        if (secondNum ==='' && sign === '') {
+            if (pressedBtn === '.' && firstNum.includes('.')) {
+            firstNum += '';
+            result.textContent = firstNum;
+        } else {
+            firstNum += pressedBtn;
+
+            result.textContent = firstNum;
+        }
+        }
+        else if (firstNum!=='' && secondNum!=='' && finish) {
+            if (sign === '') {
+                console.log(sign, 'pusto')
+                firstNum = pressedBtn;
+                result.textContent = firstNum;
+            }
+            else {secondNum =pressedBtn;
+                console.log('net')
+                result.textContent = secondNum;
+                finish = false;}
+
+console.log(finish)
+        }
+        // else if (firstNum!=='' && secondNum!=='' && !finish) {
+        //     console.log('ne finish')
+        //     secondNum=''
+        //     firstNum=pressedBtn;
+        //     result.textContent = firstNum;
+        // }
+        else {
+            secondNum += pressedBtn;
+            result.textContent = secondNum;
+        }
+        console.log(firstNum, secondNum, sign)
+        return;
+    }
+
+     // если нажат знак
+     if (signsList.includes(pressedBtn)) {
+        sign = pressedBtn;
+
+        if (sign === 'x²' || sign === '¹⁄ₓ' || sign === '√ₓ' || sign === '⌫') {
+            switch(sign) {
+                case 'x²':
+                    firstNum = firstNum * firstNum;
+                    break;
+                case '¹⁄ₓ':
+                    firstNum = 1 / firstNum;
+                    break;
+                case '√ₓ':
+                    firstNum = Math.sqrt(firstNum);
+                    break;
+                case '⌫':
+                    let backArray = [];
+                    if (firstNum.length !== 1 && firstNum.length !== 0 && firstNum.length !== undefined) {
+                    backArray= firstNum.split('');
+                    backArray.pop();
+                    firstNum = backArray.join('');
+                    } else firstNum = 0;
+                    break;
+            }
+            finish = true;
+            // sign = ''
+            // secondNum=''
+            result.textContent = firstNum;
+        }
+        
+        else result.textContent = sign;
+        finish = true;
+        return;
+    }
+    console.log(firstNum, secondNum, sign)
+});
+
 form.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
     if (secondNum ==='') secondNum = firstNum;
-    if (firstNum.includes('%')) {
-        return result.textContent = 0;
-    }
-    else if (secondNum.includes('%')) {
+    // if (firstNum.includes('%')) {
+    //     return result.textContent = 0;
+    // }
+    // else 
+
+    if (secondNum.includes('%')) {
         if (sign === '+') {
             secondNum = secondNum.split('').filter(el => el !== '%').join('') * firstNum / 100;
         }
@@ -60,75 +147,13 @@ form.addEventListener('submit', (evt) => {
                 }
                 firstNum = firstNum / secondNum;
                 break;
-            case 'x²':
-                firstNum = firstNum * firstNum;
         }
         finish = true;
+        isSubmit = true;
+        sign=''
         result.textContent = firstNum;
 
     
-
+console.log(firstNum, secondNum, sign)
 })
 
-buttons.addEventListener('click', (event) => {
-
-    if(!event.target.classList.contains('btn')) return;
-    else if(event.target === buttonAC) clearResult();
-    
-    const pressedBtn = event.target.textContent;
-
-
-    if (numbersList.includes(pressedBtn)) {
-        
-        if (secondNum ==='' && sign === '') {
-            if (pressedBtn === '.' && firstNum.includes('.')) {
-            firstNum += '';
-            result.textContent = firstNum;
-        } else {
-            firstNum += pressedBtn;
-
-            result.textContent = firstNum;
-        }
-        }
-        else if (firstNum!=='' && secondNum!=='' && finish) {
-            secondNum = pressedBtn;
-            finish = false;
-            result.textContent = secondNum;
-        }
-        // else 
-        else {
-            secondNum += pressedBtn;
-            result.textContent = secondNum;
-        }
-
-        return;
-    }
-
-     // если нажат знак
-     if (signsList.includes(pressedBtn)) {
-        sign = pressedBtn;
-        if(sign === 'x²') result.textContent = firstNum * firstNum;
-        else if (sign === '¹⁄ₓ') result.textContent = 1 / firstNum;
-        else if (sign === '√ₓ') result.textContent = Math.sqrt(firstNum);
-        else if (sign === '⌫') {
-            console.log('length', firstNum.length, firstNum, result.textContent.length)
-            if (result.textContent !== 0) {
-                let backArray = [];
-            if (firstNum.length !== 1) {
-                backArray= firstNum.split('');
-                backArray.pop();
-                firstNum = backArray.join('');
-            } 
-            else firstNum = 0;
-            }
-            
-            
-            result.textContent = firstNum;
-            return;
-        }
-        // result.textContent = firstNum.split('').pop().join('');
-        else result.textContent = sign;
-
-        return;
-    }
-});
