@@ -1,3 +1,4 @@
+
 const result = document.querySelector('.result_text');
 const buttons = document.querySelector('.buttons');
 const btn = document.querySelector('.btn');
@@ -9,20 +10,23 @@ const buttonBackspace = document.querySelector('.backspace');
 const buttonQuadrate = document.querySelector('.quadrate');
 const buttonFraction = document.querySelector('.fraction');
 const buttonRoot = document.querySelector('.sqrt');
-
-
+const buttonMS = document.querySelector('.ms');
+const buttonPlusMS = document.querySelector('.plusMemory');
+const buttonMinusMS = document.querySelector('.minusMemory');
+const buttonMR = document.querySelector('.mr');
+const buttonMC = document.querySelector('.mc');
+const simpleSigns = document.querySelectorAll('.simpleSign');
+const numbers = document.querySelectorAll('.num');
 const form = document.querySelector('.form');
-
-const numbersList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '%'];
-const signsList = ['-', '+', '×', '/'];
 
 let sign = ''; 
 let firstNum = ''; 
 let secondNum = ''; 
 let percentOfNum = null;
-let changedNum;
 let finish  = false;
+let isResult = false;
 let whatIsNumber = null;
+let memorySave = null;
 
 // очистить результат
 function clearResult () {
@@ -36,6 +40,40 @@ function clearResult () {
 // очистить последнее число
 function clearNum () {
     return result.textContent = 0;
+}
+
+function calculate () {
+    switch (sign) {
+        case '+':
+            console.log('casesum')
+            isResult = true;
+            sumNumbers();
+            break;
+        case '-':
+            console.log('caseminus')
+            isResult = true;
+            minusingNumbers();
+            break;
+        case '×':
+            if (percentOfNum !== null) firstNum = `${percentOfNum}`;
+            else firstNum = firstNum * secondNum;
+            break;
+        case '/':
+            if (secondNum === '0') {
+                result.textContent = 'Err';
+                firstNum = '';
+                secondNum = '';
+                sign = '';
+                return;
+            }
+            firstNum = firstNum / secondNum;
+            break;
+    }
+    finish = true;
+    sign='';
+    secondNum='';
+    result.textContent = firstNum;
+    whatIsNumber = 'firstNum';
 }
 
 function actualResult () {
@@ -56,6 +94,14 @@ function changeNumberSign (number) {
         positiveNumber.shift();
         return result.textContent = positiveNumber.join('');
     } 
+}
+
+function sumNumbers () {
+    return firstNum = (+firstNum) + (+secondNum);
+}
+
+function minusingNumbers () {
+    return firstNum = firstNum - secondNum;
 }
 
 function backspace (number) {
@@ -82,12 +128,37 @@ function sqrtNumber (number) {
     result.textContent = Math.sqrt(number);
 }
 
+function saveNumber () {
+    buttonMR.disabled = false;
+    buttonMC.disabled = false;
+    return memorySave = result.textContent;
+}
+
+function plusSaveMemory () {
+    if (memorySave === null) return saveNumber();
+    else return memorySave = (+memorySave) + (+result.textContent);
+}
+
+function minussaveMemory () {
+    return memorySave = memorySave - result.textContent;
+}
+
 buttonC.addEventListener('click', clearResult);
 
 buttonCE.addEventListener('click', () => {
     clearNum();
     if (whatIsNumber === 'firstNum') return firstNum = '';
     else if (whatIsNumber === 'secondNum') return secondNum = '';
+})
+
+simpleSigns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+        calculate();
+        sign = btn.textContent;
+        if (!isResult) result.textContent = sign;
+        else result.textContent = firstNum;
+        finish = true;
+    })
 })
 
 buttonMinusPlus.addEventListener('click', () => {
@@ -107,8 +178,6 @@ buttonBackspace.addEventListener('click', () => {
     if (whatIsNumber === 'firstNum') backspace(firstNum);
     else if (whatIsNumber === 'secondNum') backspace(secondNum);
     return actualResult();
-    // else if (result.textContent === 0 && whatIsNumber === 'firstNum') return firstNum = '';
-    // else if (result.textContent === 0 && whatIsNumber === 'secondNum') return secondNum = '';
 })
 
 buttonFraction.addEventListener('click', () => {
@@ -123,32 +192,43 @@ buttonRoot.addEventListener('click', () => {
     return actualResult();
 })
 
-buttons.addEventListener('click', (event) => {
-    
-    if(!event.target.classList.contains('btn')) return;
+buttonMS.addEventListener('click', saveNumber)
 
-    const pressedBtn = event.target.textContent;
+buttonPlusMS.addEventListener('click', plusSaveMemory)
 
-    if (numbersList.includes(pressedBtn)) {
-        
+buttonMinusMS.addEventListener('click', minussaveMemory)
+
+buttonMR.addEventListener('click', () => {
+    result.textContent = memorySave;
+})
+
+buttonMC.addEventListener('click', () => {
+    memorySave = null;
+    buttonMR.disabled = true;
+    buttonMC.disabled = true;
+})
+
+numbers.forEach((btn) => {
+    const buttonText = btn.textContent;
+    btn.addEventListener('click', () => {
         if (secondNum ==='' && sign === '') {
-            if (pressedBtn === '.' && firstNum.includes('.')) {
+            if (buttonText === '.' && firstNum.includes('.')) {
             firstNum += '';
             result.textContent = firstNum;
         } else {
-            firstNum += pressedBtn;
+            firstNum += buttonText;
             whatIsNumber = 'firstNum';
             result.textContent = firstNum;
         }
         }
         else if (firstNum!=='' && secondNum!=='' && finish) {
             if (sign === '') {
-                firstNum = pressedBtn;
+                firstNum = buttonText;
                 result.textContent = firstNum;
                 whatIsNumber = 'firstNum';
             }
             else {
-                secondNum += pressedBtn;
+                secondNum += buttonText;
                 console.log('n')
                 result.textContent = secondNum;
                 whatIsNumber = 'secondNum';
@@ -157,27 +237,13 @@ buttons.addEventListener('click', (event) => {
 
         }
         else {
-            secondNum += pressedBtn;
+            secondNum += buttonText;
             result.textContent = secondNum;
             whatIsNumber = whatIsNumber = 'secondNum';
         }
-        console.log(firstNum, secondNum, sign, whatIsNumber)
         return;
-    }
-
-     // если нажат знак
-     if (signsList.includes(pressedBtn)) {
-        sign = pressedBtn;
-
-        result.textContent = sign;
-        finish = true;
-        // sign = '';
-        return;
-        
-    }
-
-    console.log(firstNum, secondNum, sign, whatIsNumber)
-});
+    })
+})
 
 form.addEventListener('submit', (evt) => {
     evt.preventDefault();
@@ -192,36 +258,7 @@ form.addEventListener('submit', (evt) => {
         }
        else if (sign === '×') {
             percentOfNum = secondNum.split('').filter(el => el !== '%').join('') * firstNum / 100;
-console.log(percentOfNum)
        }
     }
-        switch (sign) {
-            case '+':
-                firstNum = (+firstNum) + (+secondNum);
-                break;
-            case '-':
-                firstNum = firstNum - secondNum;
-                break;
-            case '×':
-                if (percentOfNum !== null) firstNum = `${percentOfNum}`;
-                else firstNum = firstNum * secondNum;
-                break;
-            case '/':
-                if (secondNum === '0') {
-                    result.textContent = 'Err';
-                    firstNum = '';
-                    secondNum = '';
-                    sign = '';
-                    return;
-                }
-                firstNum = firstNum / secondNum;
-                break;
-        }
-        finish = true;
-        sign='';
-        secondNum='';
-        result.textContent = firstNum;
-        whatIsNumber = 'firstNum';
-        console.log(firstNum, secondNum, sign, whatIsNumber)
-})
-
+    calculate();
+    })
