@@ -2,11 +2,13 @@ const result = document.querySelector('.result_text');
 const buttons = document.querySelector('.buttons');
 const btn = document.querySelector('.btn');
 const buttonCE = document.querySelector('.ce');
-const buttonC = document.querySelector('.c')
+const buttonC = document.querySelector('.c');
+const buttonMinusPlus = document.querySelector('.changeSign');
+const buttonBackspace = document.querySelector('.backspace')
 const form = document.querySelector('.form');
 
-const numbersList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '%', '+/-'];
-const signsList = ['-', '+', '×', '/', '⌫', 'x²', '¹⁄ₓ', '√ₓ'];
+const numbersList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '%'];
+const signsList = ['-', '+', '×', '/', 'x²', '¹⁄ₓ', '√ₓ'];
 
 let sign = ''; 
 let firstNum = ''; 
@@ -28,22 +30,73 @@ function clearResult () {
 function clearNum () {
     if (firstNum !== '' && secondNum === '') {
         firstNum = ''; 
-        
     }
     else secondNum = '';
 
     result.textContent = 0;
 }
 
+function changeNumberSign () {
+    let newArray = [];
+    if(result.textContent === firstNum ) {
+        if (firstNum > 0) firstNum = `-${firstNum}`
+        else { 
+            newArray = firstNum.split('');
+            newArray.shift()
+            firstNum = newArray.join('')
+}
+        result.textContent = firstNum;
+    }
+    else {
+        if (secondNum > 0) secondNum = `-${secondNum}`;
+        else { 
+            
+            newArray = secondNum.split('');
+            newArray.shift()
+            secondNum = newArray.join('')
+}
 
+        result.textContent = secondNum;
+    }
+}
+
+function backspace () {
+    let backArray = [];
+    if (result.textContent === 0) return;
+    else {
+    backArray = result.textContent.split('');
+    backArray.pop();
+    if (result.textContent === firstNum) {
+        console.log('f')
+        if (firstNum.length === 1 || firstNum.length === 0) {
+            firstNum = '';
+            result.textContent = 0;
+        } else {
+            firstNum = backArray.join('');
+            result.textContent = firstNum;
+        }
+    } else if (firstNum === '') result.textContent = 0;
+    else { 
+        if (secondNum.length === 1) {
+            secondNum = ''
+            result.textContent = 0;
+        } 
+        else if (secondNum === '') result.textContent = 0;
+        else {
+            secondNum = backArray.join('');
+            result.textContent = secondNum;}
+        }
+    }
+}
 
 buttons.addEventListener('click', (event) => {
     
     if(!event.target.classList.contains('btn')) return;
-    else if(event.target === buttonCE) clearNum();
+    else if (event.target === buttonCE) clearNum();
     else if (event.target === buttonC) clearResult();
+    else if (event.target === buttonMinusPlus ) changeNumberSign();
+    else if (event.target === buttonBackspace) backspace();
 
-    
     const pressedBtn = event.target.textContent;
 
     if (numbersList.includes(pressedBtn)) {
@@ -95,33 +148,35 @@ buttons.addEventListener('click', (event) => {
                 case '√ₓ':
                     firstNum = Math.sqrt(firstNum);
                     break;
-                case '⌫':
-                    let backArray = [];
-                    console.log(firstNum.length)
-                    backArray = result.textContent.split('');
-                    backArray.pop();
-                    if (result.textContent === firstNum) {
-                        if (firstNum.length === 1) {
-                            firstNum = '';
-                            result.textContent = 0;
-                        }
-                        else {
-                        firstNum = backArray.join('');
-                        result.textContent = firstNum;
-                    }
-                    }
-                    else { 
-                        if (secondNum.length === 1) {
-                            secondNum = ''
-                            result.textContent = 0;
-                        } 
-                        else {
-                        secondNum = backArray.join('');
-                        result.textContent = secondNum;}
-                    }
-                    break;
+                // case '⌫':
+                //     let backArray = [];
+
+                //     backArray = result.textContent.split('');
+                //     backArray.pop();
+                //     if (result.textContent === firstNum) {
+                //         if (firstNum.length === 1) {
+                //             firstNum = '';
+                //             result.textContent = 0;
+                //         }
+                //         else {
+                //         firstNum = backArray.join('');
+                //         result.textContent = firstNum;
+                //     }
+                //     }
+                //     else { 
+                //         if (secondNum.length === 1) {
+                //             secondNum = ''
+                //             result.textContent = 0;
+                //         } 
+                //         else {
+                //         secondNum = backArray.join('');
+                //         result.textContent = secondNum;}
+                //     }
+                //     break;
+
             }
-            if (sign !== '⌫') result.textContent = firstNum;
+            // if (sign !== '⌫') 
+            result.textContent = firstNum;
                     
             finish = true;
             sign = ''
