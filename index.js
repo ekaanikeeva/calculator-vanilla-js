@@ -8,7 +8,7 @@ const buttonMinusPlus = document.querySelector('.changeSign');
 const buttonBackspace = document.querySelector('.backspace');
 const buttonQuadrate = document.querySelector('.quadrate');
 const buttonFraction = document.querySelector('.fraction');
-const buttonRoot = document.querySelector('.root');
+const buttonRoot = document.querySelector('.sqrt');
 
 
 const form = document.querySelector('.form');
@@ -71,9 +71,7 @@ function backspace (number) {
 }
 
 function quadrateNumber (number) {
-
     result.textContent = number * number;
-    
 }
 
 function fractionNumber (number) {
@@ -81,7 +79,6 @@ function fractionNumber (number) {
 }
 
 function sqrtNumber (number) {
-    // console.log(Math.sqrt(number))
     result.textContent = Math.sqrt(number);
 }
 
@@ -114,17 +111,22 @@ buttonBackspace.addEventListener('click', () => {
     // else if (result.textContent === 0 && whatIsNumber === 'secondNum') return secondNum = '';
 })
 
+buttonFraction.addEventListener('click', () => {
+    if (whatIsNumber === 'firstNum') fractionNumber(firstNum);
+    else if (whatIsNumber === 'secondNum') fractionNumber(secondNum);
+    return actualResult();
+})
+
+buttonRoot.addEventListener('click', () => {
+    if (whatIsNumber === 'firstNum') sqrtNumber(firstNum);
+    else if (whatIsNumber === 'secondNum') sqrtNumber(secondNum);
+    return actualResult();
+})
+
 buttons.addEventListener('click', (event) => {
     
     if(!event.target.classList.contains('btn')) return;
-    // else if (event.target === buttonCE) clearNum();
-    // else if (event.target === buttonC) clearResult();
-    // else if (event.target === buttonMinusPlus ) changeNumberSign();
-    // else if (event.target === buttonBackspace) backspace();
-    // else if (event.target === buttonQuadrate) quadrateNumber()
-    else if (event.target === buttonFraction) fractionNumber(firstNum);
-    else if (event.target === buttonRoot) sqrtNumber(firstNum);
-    
+
     const pressedBtn = event.target.textContent;
 
     if (numbersList.includes(pressedBtn)) {
@@ -167,27 +169,6 @@ buttons.addEventListener('click', (event) => {
      if (signsList.includes(pressedBtn)) {
         sign = pressedBtn;
 
-        if (sign === '√ₓ') {
-            switch(sign) {
-
-                // case '¹⁄ₓ':
-                //     firstNum = 1 / firstNum;
-                //     break;
-                case '√ₓ':
-                    firstNum = Math.sqrt(firstNum);
-                    break;
-                
-
-            }
-            whatIsNumber = 'firstNum';
-            result.textContent = firstNum;
-                    
-            finish = true;
-            sign = ''
-            
-        }
-        
-        else 
         result.textContent = sign;
         finish = true;
         // sign = '';

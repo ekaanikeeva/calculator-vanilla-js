@@ -3,41 +3,42 @@
 }
 
 .form {
-    max-width: 25vw;
-    background-color: #cdc7c7;;
+    width: 350px;
+    background-color: #f5eeee;
     border-radius: 3%;
     padding: 15px;
 }
 .buttons {
     display: grid;
-    grid-template-areas: 
-    "ac percent root divide"
-    "seven eigth nine multiply"
-    "four five six minus"
-    "one two three plus"
-    "changeSign zero comma equal";
-    grid-gap: 9px;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 5px;
     justify-items: center;
 }
 
 .btn {
+    padding: 0;
     font-family: Arial, Helvetica, sans-serif;
     text-align: center;
-    line-height: 60px;
-    width: 60px;
-    height: 60px;
-    border-radius: 10%;
+    line-height: 45px;
+    width: 100%;
+    height: 100%;
+    border-radius: 5%;
     background: white;
-    font-size: 1.5rem;
+    font-size: 20px;
     cursor: pointer;
     user-select: none;
-    border: none;
+    border: 2px solid rgba(221, 213, 213, 0.5)
 }
 
 .btn:hover {
     box-shadow: 0px -1px 10px 1px #ffffff;
     opacity: 0.9;
 }
+
+.btn:focus {
+    outline: 2px solid rgba(136, 117, 180, 0.4);
+}
+
 .btn_grey {
     background-color: antiquewhite;
 }
@@ -47,6 +48,7 @@
     background: #ffffff;
     border-radius: 0%;
     margin-bottom: 21px;
+    border: 2px solid rgba(221, 213, 213, 0.5);
 }
 
 .result_text {
@@ -61,4 +63,15 @@
 
 .btn_blue {
     background-color: #d2eef7;
+}
+
+.memory {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    margin-bottom: 5px;
+}
+
+.btn_save {
+    line-height: 30px;
+    font-size: 14px;
 }
