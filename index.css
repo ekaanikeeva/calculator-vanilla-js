@@ -71,9 +71,17 @@
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     margin-bottom: 5px;
+    column-gap: 1px;
 }
 
 .btn_save {
     line-height: 30px;
     font-size: 14px;
+}
+
+.signButtons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr) repeat(2, 0.5fr);
+    column-gap: 2px;
+    margin-bottom: 5px;
 }
