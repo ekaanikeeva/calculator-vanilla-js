@@ -18,6 +18,8 @@ const buttonMC = document.querySelector('.mc');
 const simpleSigns = document.querySelectorAll('.simpleSign');
 const numbers = document.querySelectorAll('.num');
 const form = document.querySelector('.form');
+const openBracket = document.querySelector('.openBracket');
+const closeBracket = document.querySelector('.closeBracket');
 
 let sign = ''; 
 let firstNum = ''; 
@@ -27,7 +29,8 @@ let finish  = false;
 let isResult = false;
 let whatIsNumber = null;
 let memorySave = null;
-
+let savedValue = null;
+let savedSign = null;
 // очистить результат
 function clearResult () {
     firstNum = ''; 
@@ -208,6 +211,26 @@ buttonMC.addEventListener('click', () => {
     buttonMC.disabled = true;
 })
 
+openBracket.addEventListener('click', () => {
+    savedSign = sign;
+    calculate();
+    if (whatIsNumber === 'firstNum') savedValue = firstNum;
+    else if (whatIsNumber === 'secondNum') savedValue = secondNum;
+    
+   clearResult();
+})
+
+closeBracket.addEventListener('click', () => {
+    calculate()
+    if(savedValue === null) return;
+    else if (savedSign !== null || savedSign !== '') sign = savedSign;
+        secondNum = firstNum;
+        firstNum = savedValue;
+        savedValue === null;
+        savedSign === null;
+    console.log(firstNum, sign, secondNum)
+})
+
 numbers.forEach((btn) => {
     const buttonText = btn.textContent;
     btn.addEventListener('click', () => {
@@ -241,24 +264,31 @@ numbers.forEach((btn) => {
             result.textContent = secondNum;
             whatIsNumber = whatIsNumber = 'secondNum';
         }
+        console.log(firstNum, sign, secondNum)
         return;
     })
+    
 })
+
 
 form.addEventListener('submit', (evt) => {
     evt.preventDefault();
-
+    if (firstNum !== '' && secondNum !== '' && sign === '') {
+        firstNum = secondNum;
+        secondNum = '';
+        return;
+    }
     if (secondNum ==='') secondNum = firstNum;
-    // if (firstNum.includes('%')) {
+    // if (firstNum.split('').includes('%')) {
     //     return result.textContent = 0;
     // }
-    else if (secondNum.includes('%')) {
-        if (sign === '+') {
-            secondNum = secondNum.split('').filter(el => el !== '%').join('') * firstNum / 100;
-        }
-       else if (sign === '×') {
-            percentOfNum = secondNum.split('').filter(el => el !== '%').join('') * firstNum / 100;
-       }
-    }
+    // else if (secondNum.split('').includes('%')) {
+    //     if (sign === '+') {
+    //         secondNum = secondNum.split('').filter(el => el !== '%').join('') * firstNum / 100;
+    //     }
+    //    else if (sign === '×') {
+    //         percentOfNum = secondNum.split('').filter(el => el !== '%').join('') * firstNum / 100;
+    //    }
+    // }
     calculate();
     })
