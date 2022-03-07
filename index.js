@@ -16,6 +16,7 @@ const buttonMinusMS = document.querySelector('.minusMemory');
 const buttonMR = document.querySelector('.mr');
 const buttonMC = document.querySelector('.mc');
 const simpleSigns = document.querySelectorAll('.simpleSign');
+const buttonPercent = document.querySelector('.percent');
 const numbers = document.querySelectorAll('.num');
 const form = document.querySelector('.form');
 const openBracket = document.querySelector('.openBracket');
@@ -146,6 +147,38 @@ function minussaveMemory () {
     return memorySave = memorySave - result.textContent;
 }
 
+function percent () {
+    if (whatIsNumber === 'firstNum') return result.textContent = 0;
+    else if (whatIsNumber === 'secondNum') {
+        switch (sign) {
+            case '+':
+                secondNum = secondNum * firstNum / 100;
+                result.textContent = secondNum;
+                break;
+            case '-':
+                secondNum = firstNum - secondNum * firstNum / 100;
+                result.textContent = secondNum;
+                break;
+            case '×':
+                firstNum = secondNum * firstNum / 100;
+                result.textContent = secondNum / 100;
+                finish = true;
+                sign='';
+                secondNum='';
+                whatIsNumber = 'firstNum';
+                break;
+            case '/':
+                secondNum = secondNum / 100;
+                result.textContent = secondNum;
+                firstNum = firstNum / secondNum;
+                finish = true;
+                sign='';
+                secondNum='';
+                whatIsNumber = 'firstNum';
+        }
+    }
+}
+
 buttonC.addEventListener('click', clearResult);
 
 buttonCE.addEventListener('click', () => {
@@ -210,6 +243,8 @@ buttonMC.addEventListener('click', () => {
     buttonMR.disabled = true;
     buttonMC.disabled = true;
 })
+
+buttonPercent.addEventListener('click', percent)
 
 openBracket.addEventListener('click', () => {
     savedSign = sign;
@@ -279,16 +314,6 @@ form.addEventListener('submit', (evt) => {
         return;
     }
     if (secondNum ==='') secondNum = firstNum;
-    // if (firstNum.split('').includes('%')) {
-    //     return result.textContent = 0;
-    // }
-    // else if (secondNum.split('').includes('%')) {
-    //     if (sign === '+') {
-    //         secondNum = secondNum.split('').filter(el => el !== '%').join('') * firstNum / 100;
-    //     }
-    //    else if (sign === '×') {
-    //         percentOfNum = secondNum.split('').filter(el => el !== '%').join('') * firstNum / 100;
-    //    }
-    // }
+    
     calculate();
     })
