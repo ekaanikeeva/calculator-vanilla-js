@@ -32,12 +32,15 @@ let whatIsNumber = null;
 let memorySave = null;
 let savedValue = null;
 let savedSign = null;
+let expression = '';
+
 // очистить результат
 function clearResult () {
     firstNum = ''; 
     secondNum = '';
     sign = ''; // знак
     finish = false;
+    expression = '';
     result.textContent = 0;
 }
 
@@ -46,23 +49,24 @@ function clearNum () {
     return result.textContent = 0;
 }
 
+// + - * /
 function calculate () {
     switch (sign) {
         case '+':
-            console.log('casesum')
             isResult = true;
             sumNumbers();
             break;
         case '-':
-            console.log('caseminus')
             isResult = true;
             minusingNumbers();
             break;
         case '×':
-            if (percentOfNum !== null) firstNum = `${percentOfNum}`;
-            else firstNum = firstNum * secondNum;
+            if (secondNum === '') return;
+            firstNum = firstNum * secondNum;
+            isResult = true;
             break;
         case '/':
+            if (secondNum === '') return;
             if (secondNum === '0') {
                 result.textContent = 'Err';
                 firstNum = '';
@@ -71,6 +75,7 @@ function calculate () {
                 return;
             }
             firstNum = firstNum / secondNum;
+            isResult = true;
             break;
     }
     finish = true;
@@ -247,6 +252,7 @@ buttonMC.addEventListener('click', () => {
 buttonPercent.addEventListener('click', percent)
 
 openBracket.addEventListener('click', () => {
+    console.log(firstNum, secondNum)
     savedSign = sign;
     calculate();
     if (whatIsNumber === 'firstNum') savedValue = firstNum;
@@ -257,15 +263,17 @@ openBracket.addEventListener('click', () => {
 
 closeBracket.addEventListener('click', () => {
     calculate()
-    if(savedValue === null) return;
-    else if (savedSign !== null || savedSign !== '') sign = savedSign;
+    if(savedValue === '' || savedValue === null) return;
+    else if ( savedSign !== '') sign = savedSign;
         secondNum = firstNum;
         firstNum = savedValue;
-        savedValue === null;
-        savedSign === null;
-    console.log(firstNum, sign, secondNum)
+        signBracketClose=')'
+        savedValue = null;
+        savedSign = null;
+
 })
 
+// числа 0-9 и .
 numbers.forEach((btn) => {
     const buttonText = btn.textContent;
     btn.addEventListener('click', () => {
@@ -287,7 +295,6 @@ numbers.forEach((btn) => {
             }
             else {
                 secondNum += buttonText;
-                console.log('n')
                 result.textContent = secondNum;
                 whatIsNumber = 'secondNum';
                 finish = false;
@@ -299,12 +306,13 @@ numbers.forEach((btn) => {
             result.textContent = secondNum;
             whatIsNumber = whatIsNumber = 'secondNum';
         }
-        console.log(firstNum, sign, secondNum)
+        
+        // expression = savedValue + ' ' + savedSign + ' ' + signBracketOpen + ' ' + firstNum + ' ' + sign + ' ' + secondNum + ' ' + signBracketClose;
+        console.log(firstNum,secondNum,sign)
         return;
     })
     
 })
-
 
 form.addEventListener('submit', (evt) => {
     evt.preventDefault();
