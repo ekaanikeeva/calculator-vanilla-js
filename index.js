@@ -44,6 +44,8 @@ function clearResult () {
     sign = ''; // знак
     finish = false;
     expression = '';
+    savedValue = '';
+    savedSign = '';
     fullFormula.textContent = '';
     result.textContent = 0;
 }
@@ -365,5 +367,7 @@ form.addEventListener('submit', (evt) => {
     fullFormula.textContent = '';
     signBracketClose = '';
     signBracketOpen = '';
+    savedValue = '';
+    savedSign = '';
     calculate();
     })
