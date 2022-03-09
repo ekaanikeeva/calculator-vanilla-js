@@ -21,6 +21,7 @@ const numbers = document.querySelectorAll('.num');
 const form = document.querySelector('.form');
 const openBracket = document.querySelector('.openBracket');
 const closeBracket = document.querySelector('.closeBracket');
+const fullFormula = document.querySelector('.result_formula');
 
 let sign = ''; 
 let firstNum = ''; 
@@ -30,9 +31,11 @@ let finish  = false;
 let isResult = false;
 let whatIsNumber = null;
 let memorySave = null;
-let savedValue = null;
-let savedSign = null;
+let savedValue = '';
+let savedSign = '';
 let expression = '';
+let signBracketOpen = '';
+let signBracketClose = '';
 
 // очистить результат
 function clearResult () {
@@ -95,6 +98,7 @@ function actualResult () {
         if (result.textContent == 0) return secondNum = '';
         else return secondNum = result.textContent;
     }
+    saveFullFormula();
 }
 
 // поменять у числа + на - и наоборот
@@ -143,13 +147,16 @@ function fractionNumber (number) {
 // корень из числа
 function sqrtNumber (number) {
     result.textContent = Math.sqrt(number);
+    saveFullFormula();
 }
 
 // сохранить в Memory
 function saveNumber () {
     buttonMR.disabled = false;
     buttonMC.disabled = false;
+    saveFullFormula();
     return memorySave = result.textContent;
+    
 }
 
 // прибывить к сохраненному в Memory
@@ -196,6 +203,11 @@ function percent () {
     }
 }
 
+function saveFullFormula () {
+    expression = savedValue + ' ' + savedSign + ' ' + signBracketOpen + ' ' + firstNum + ' ' + sign + ' ' + secondNum + ' ' + signBracketClose;
+    return fullFormula.textContent = expression;
+}
+
 // слушатели кнопок
 
 buttonC.addEventListener('click', clearResult);
@@ -206,6 +218,7 @@ buttonCE.addEventListener('click', () => {
     else if (whatIsNumber === 'secondNum') return secondNum = '';
 })
 
+// слушатель кнопок + - / *
 simpleSigns.forEach((btn) => {
     btn.addEventListener('click', () => {
         calculate();
@@ -213,6 +226,7 @@ simpleSigns.forEach((btn) => {
         if (!isResult) result.textContent = sign;
         else result.textContent = firstNum;
         finish = true;
+        saveFullFormula();
     })
 })
 
@@ -268,25 +282,29 @@ buttonMC.addEventListener('click', () => {
 buttonPercent.addEventListener('click', percent)
 
 openBracket.addEventListener('click', () => {
-    console.log(firstNum, secondNum)
     savedSign = sign;
     calculate();
     if (whatIsNumber === 'firstNum') savedValue = firstNum;
     else if (whatIsNumber === 'secondNum') savedValue = secondNum;
-    
-   clearResult();
+    signBracketOpen = `(`;
+    clearResult();
+    saveFullFormula();
+    signBracketClose = `)`;
 })
 
 closeBracket.addEventListener('click', () => {
     calculate()
-    if(savedValue === '' || savedValue === null) return;
+    if(savedValue === '') return;
     else if ( savedSign !== '') sign = savedSign;
         secondNum = firstNum;
         firstNum = savedValue;
         signBracketClose=')'
-        savedValue = null;
-        savedSign = null;
-
+        savedValue = '';
+        savedSign = '';
+        signBracketClose = '';
+        signBracketOpen = '';
+        saveFullFormula();
+        
 })
 
 // числа 0-9 и .
@@ -326,9 +344,7 @@ numbers.forEach((btn) => {
             result.textContent = secondNum;
             whatIsNumber = whatIsNumber = 'secondNum';
         }
-        
-        // expression = savedValue + ' ' + savedSign + ' ' + signBracketOpen + ' ' + firstNum + ' ' + sign + ' ' + secondNum + ' ' + signBracketClose;
-        console.log(firstNum,secondNum,sign)
+        saveFullFormula();
         return;
     })
     
@@ -343,6 +359,9 @@ form.addEventListener('submit', (evt) => {
         return;
     }
     if (secondNum ==='') secondNum = firstNum;
-    
+    expression = '';
+    fullFormula.textContent = '';
+    signBracketClose = '';
+    signBracketOpen = '';
     calculate();
     })
