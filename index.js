@@ -41,13 +41,15 @@ let signBracketClose = '';
 function clearResult () {
     firstNum = ''; 
     secondNum = '';
-    sign = ''; // знак
+    sign = ''; 
     finish = false;
+    result.textContent = 0;
     expression = '';
     savedValue = '';
     savedSign = '';
+    signBracketClose = '';
+    signBracketOpen = '';
     fullFormula.textContent = '';
-    result.textContent = 0;
 }
 
 // очистить последнее число
@@ -291,9 +293,12 @@ openBracket.addEventListener('click', () => {
     if (whatIsNumber === 'firstNum') savedValue = firstNum;
     else if (whatIsNumber === 'secondNum') savedValue = secondNum;
     signBracketOpen = `(`;
-    clearResult();
+    firstNum = ''; 
+    secondNum = '';
+    sign = ''; 
+    finish = false;
     saveFullFormula();
-    signBracketClose = `)`;
+
 })
 
 closeBracket.addEventListener('click', () => {
