@@ -44,11 +44,13 @@ function clearResult () {
     sign = ''; // знак
     finish = false;
     expression = '';
+    fullFormula.textContent = '';
     result.textContent = 0;
 }
 
 // очистить последнее число
 function clearNum () {
+    saveFullFormula();
     return result.textContent = 0;
 }
 
