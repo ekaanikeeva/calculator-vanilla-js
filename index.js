@@ -85,6 +85,7 @@ function calculate () {
     whatIsNumber = 'firstNum';
 }
 
+// записать результат в переменные
 function actualResult () {
     if (whatIsNumber === 'firstNum') {
         if (result.textContent == 0) return firstNum = '';
@@ -96,6 +97,7 @@ function actualResult () {
     }
 }
 
+// поменять у числа + на - и наоборот
 function changeNumberSign (number) {
     if (number > 0) return result.textContent = `-${number}`;
     else {
@@ -105,14 +107,17 @@ function changeNumberSign (number) {
     } 
 }
 
+// сумма чисел
 function sumNumbers () {
     return firstNum = (+firstNum) + (+secondNum);
 }
 
+// вычитание
 function minusingNumbers () {
     return firstNum = firstNum - secondNum;
 }
 
+// уменьшить / сбросить число
 function backspace (number) {
     if (result.textContent === 0) return;
     else {
@@ -125,33 +130,40 @@ function backspace (number) {
     }
 }
 
+// число в квадрат
 function quadrateNumber (number) {
     result.textContent = number * number;
 }
 
+// дробь 1/число
 function fractionNumber (number) {
     result.textContent = 1 / number;
 }
 
+// корень из числа
 function sqrtNumber (number) {
     result.textContent = Math.sqrt(number);
 }
 
+// сохранить в Memory
 function saveNumber () {
     buttonMR.disabled = false;
     buttonMC.disabled = false;
     return memorySave = result.textContent;
 }
 
+// прибывить к сохраненному в Memory
 function plusSaveMemory () {
     if (memorySave === null) return saveNumber();
     else return memorySave = (+memorySave) + (+result.textContent);
 }
 
+// сохраненное число минус текущее
 function minussaveMemory () {
     return memorySave = memorySave - result.textContent;
 }
 
+// процент
 function percent () {
     if (whatIsNumber === 'firstNum') return result.textContent = 0;
     else if (whatIsNumber === 'secondNum') {
@@ -161,7 +173,7 @@ function percent () {
                 result.textContent = secondNum;
                 break;
             case '-':
-                secondNum = firstNum - secondNum * firstNum / 100;
+                secondNum = secondNum * firstNum / 100;
                 result.textContent = secondNum;
                 break;
             case '×':
@@ -183,6 +195,8 @@ function percent () {
         }
     }
 }
+
+// слушатели кнопок
 
 buttonC.addEventListener('click', clearResult);
 
@@ -241,6 +255,8 @@ buttonMinusMS.addEventListener('click', minussaveMemory)
 
 buttonMR.addEventListener('click', () => {
     result.textContent = memorySave;
+    if (whatIsNumber === 'firstNum') firstNum = memorySave;
+    else if (whatIsNumber === 'secondNum') secondNum = memorySave;
 })
 
 buttonMC.addEventListener('click', () => {
@@ -301,6 +317,10 @@ numbers.forEach((btn) => {
             }
 
         }
+        else if (buttonText === '.' && secondNum.includes('.')) {
+            secondNum += '';
+            result.textContent = secondNum;
+        }
         else {
             secondNum += buttonText;
             result.textContent = secondNum;
@@ -314,6 +334,7 @@ numbers.forEach((btn) => {
     
 })
 
+// слушатель формы
 form.addEventListener('submit', (evt) => {
     evt.preventDefault();
     if (firstNum !== '' && secondNum !== '' && sign === '') {
